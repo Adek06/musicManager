@@ -36,3 +36,10 @@
     </ul>
   </article>
 </section>
+
+<section class="row">
+  <div data-controller="music">
+    <input type="file" name="myfile" id="musicFile" data-music-target="musicFile" />
+    <button data-action="click->music#upload">log file name</button>
+  </div>
+</section>

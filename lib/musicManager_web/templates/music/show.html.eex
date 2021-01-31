@@ -1,0 +1,18 @@
+<h1>Show Music</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @music.name %>
+  </li>
+
+  <li>
+    <strong>File:</strong>
+    <%= @music.file %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.music_path(@conn, :edit, @music) %></span>
+<span><%= link "Back", to: Routes.music_path(@conn, :index) %></span>

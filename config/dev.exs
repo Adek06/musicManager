@@ -74,3 +74,8 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :aliyun_oss,
+  endpoint: {:system, "ALIYUN_ENDPOINT"},
+  access_key_id: {:system, "ALIYUN_ACCESS_KEY_ID"},
+  access_key_secret: {:system, "ALIYUN_ACCESS_KEY_SECRET"}

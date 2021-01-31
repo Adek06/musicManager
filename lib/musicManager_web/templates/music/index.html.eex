@@ -1,45 +1,28 @@
-<section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Music" %></h1>
-  <p>Peace of mind from prototype to production</p>
-</section>
+<h1>Listing Musics</h1>
 
-<section class="row">
-  <article class="column">
-    <h2>Resources</h2>
-    <ul>
-      <li>
-        <a href="https://hexdocs.pm/phoenix/overview.html">Guides &amp; Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix/blob/v1.5/CHANGELOG.md">v1.5 Changelog</a>
-      </li>
-    </ul>
-  </article>
-  <article class="column">
-    <h2>Help</h2>
-    <ul>
-      <li>
-        <a href="https://elixirforum.com/c/phoenix-forum">Forum</a>
-      </li>
-      <li>
-        <a href="https://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on Freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">Twitter @elixirphoenix</a>
-      </li>
-      <li>
-        <a href="https://elixir-slackin.herokuapp.com/">Elixir on Slack</a>
-      </li>
-    </ul>
-  </article>
-</section>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>File</th>
 
-<section class="row">
-  <div data-controller="music">
-    <input type="file" name="myfile" id="musicFile" data-music-target="musicFile" />
-    <button data-action="click->music#test">log file name</button>
-  </div>
-</section>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for music <- @musics do %>
+    <tr>
+      <td><%= music.name %></td>
+      <td><%= music.file %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.music_path(@conn, :show, music) %></span>
+        <span><%= link "Edit", to: Routes.music_path(@conn, :edit, music) %></span>
+        <span><%= link "Delete", to: Routes.music_path(@conn, :delete, music), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Music", to: Routes.music_path(@conn, :new) %></span>

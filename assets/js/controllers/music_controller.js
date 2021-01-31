@@ -1,5 +1,7 @@
 // music_controller.js
 import { Controller } from "stimulus"
+import "axios"
+import axios from "axios"
 let OSS = require('ali-oss')
 
 
@@ -7,10 +9,18 @@ let OSS = require('ali-oss')
 export default class extends Controller {
     static targets = [ "name", "output", "musicFile" ]
     test() {
-        console.log(this.musicFileTarget)
-        console.log(musicFile.id)
-        var fileObj = document.getElementById("musicFile").files[0];
-        console.log(fileObj)
+        console.log("test")
+        var csrf = document.querySelector("meta[name=csrf]").content;
+
+        axios.post('/music', {
+            name: 'test',
+            url: 'test url'
+        },
+        {
+            headers: {
+                "X-CSRF-TOKEN": csrf
+            }
+        })
     }
 
     upload() {

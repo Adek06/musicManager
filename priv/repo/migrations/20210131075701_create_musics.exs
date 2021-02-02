@@ -3,9 +3,16 @@ defmodule MusicManager.Repo.Migrations.CreateMusics do
 
   def change do
     create table(:musics) do
-      add :name, :string
-      add :file, :binary
-
+      add :title, :string
+      add :filePath, :string
+      add :artist, :string
+      add :album, :string
+      add :year, :integer
+      add :comment, :string
+      add :zero_byte, :binary
+      add :track, :binary
+      add :genre, :string
+      
       timestamps()
     end
 

@@ -2,8 +2,8 @@ use Mix.Config
 
 # Configure your database
 config :musicManager, MusicManager.Repo,
-  username: "root",
-  password: "public",
+  username: "elixir",
+  password: "password",
   database: "musicmanager_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,

@@ -15,10 +15,8 @@ defmodule MusicManagerWeb.MusicController do
   end
 
   def create(conn, %{"music" => music_params}) do
-    IO.inspect music_params     
     file = music_params["musicFile"]
-    IO.inspect file.filename
-    IO.inspect file.path
+
     {:ok, content} = File.read(file.path)
     Aliyun.Oss.Object.put_object("adek06game", file.filename, content)
     case Manage.create_music(music_params) do

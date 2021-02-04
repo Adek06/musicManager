@@ -33,6 +33,7 @@ defmodule Mp3 do
     %{size: size, version: version} = header(bytes)
     << _ :: binary-size(10), framedata :: binary-size(size), _ :: binary >> = bytes
     versionMajor = elem version, 0
+    IO.puts versionMajor
     read_frame(versionMajor, framedata)
   end
 
@@ -47,21 +48,22 @@ defmodule Mp3 do
   ## Examples
 
       iex> Mp3.read_frame(0, bytes)
-      "Hello, Sean"
+      %{}
   """
-  def read_frame(_, {}) do
-    {}
+  @spec read_frame(Integer.t(), Binary.t()) :: %{}
+  def read_frame(_, <<0, _ :: binary>>) do
+    %{}
   end
 
   def read_frame(2, data) do
     << frame_header :: binary-size(6), rest :: binary >> = data
     << identifier :: binary-size(3), size :: binary-size(3) >> = frame_header
 
-    frame_info_size = cal_size(0, size) - 6
+    frame_info_size = cal_size(2, size)
     << content :: binary-size(frame_info_size), another :: binary >> = rest
+
     IO.puts identifier
-    IO.puts cal_size(2, size)
-    IO.puts content
+    Enum.join(for <<c::utf8 <- content>>, do: <<c::utf8>>) |> IO.puts
 
     read_frame(2, another)
   end
@@ -69,9 +71,7 @@ defmodule Mp3 do
   def read_frame(_, data) do
     << frame_header :: binary-size(10), rest :: binary >> = data
     << frame_type :: binary-size(4), size :: binary-size(4), flag :: binary-size(3)>> = frame_header
-    IO.puts frame_type
     tag_size = cal_size(1, size)
-    IO.puts tag_size
   end
 
   def tags() do

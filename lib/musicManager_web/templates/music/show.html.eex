@@ -3,13 +3,8 @@
 <ul>
 
   <li>
-    <strong>Name:</strong>
-    <%= @music.name %>
-  </li>
-
-  <li>
-    <strong>File:</strong>
-    <%= @music.file %>
+    <strong>Title:</strong>
+    <%= @music.title %>
   </li>
 
 </ul>

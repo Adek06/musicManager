@@ -12,8 +12,7 @@
   <tbody>
 <%= for music <- @musics do %>
     <tr>
-      <td><%= music.name %></td>
-      <td><%= music.file %></td>
+      <td><%= music.title %></td>
 
       <td>
         <span><%= link "Show", to: Routes.music_path(@conn, :show, music) %></span>

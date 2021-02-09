@@ -135,11 +135,11 @@ defmodule ID3v2 do
 
     value = read_payload(frame_type, payload) |> strip_zero_bytes
     
-    IO.puts frame_type
-    IO.inspect value
-    IO.puts "\n"
+    #IO.puts frame_type
+    #IO.inspect value
+    #IO.puts "\n"
     
-    read_frame(version, another_frames)
+    Map.merge(%{frame_type => value}, read_frame(version, another_frames))
   end
 
   def strip_zero_bytes(<<h, t::binary>>) do
@@ -247,7 +247,7 @@ defmodule ID3v2 do
   def parse(filename) do
     case File.read(filename) do
       {:ok, binary} ->
-        IO.inspect frames(binary)
+        frames(binary)
       _ ->
         IO.puts "Can't not open #{filename}"
     end

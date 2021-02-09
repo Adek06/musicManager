@@ -16,10 +16,42 @@ defmodule MusicManagerWeb.MusicController do
 
   def create(conn, %{"music" => music_params}) do
     file = music_params["musicFile"]
+    File.cp(file.path, "priv/static/music/#{file.filename}")
 
-    {:ok, content} = File.read(file.path)
-    Aliyun.Oss.Object.put_object("adek06game", file.filename, content)
-    case Manage.create_music(music_params) do
+    id3_tags = ID3v2.parse(file.path)
+    album_title = if Map.get(id3_tags, "TALB"), do: id3_tags["TALB"], else: "未知"
+    year = if Map.get(id3_tags, "TDRC"), do: id3_tags["TDRC"], else: 999
+    album = Manage.get_album_by_name(album_title)
+    album_id = if album == nil do
+      album_id = case Manage.create_album(%{:title => album_title, :year => year}) do
+                   {:ok, album} ->
+                     album.id
+                   {:error, %Ecto.Changeset{} = changeset} ->
+                     render(conn, "new.html", changeset: changeset)
+                 end
+      album_id
+    else
+      album.id
+    end
+
+    artist_name = if Map.get(id3_tags, "TPE1"), do: id3_tags["TPE1"], else: "未知"
+    artist = Manage.get_artist_by_name(artist_name)
+    artist_id = if artist == nil do
+      artist_id = case Manage.create_artist(%{:name => artist_name}) do
+                   {:ok, artist} ->
+                     artist.id
+                   {:error, %Ecto.Changeset{} = changeset} ->
+                     render(conn, "new.html", changeset: changeset)
+                 end
+      artist_id
+    else
+      artist.id
+    end
+
+    # {:ok, content} = File.read(file.path)
+    # Aliyun.Oss.Object.put_object("adek06game", file.filename, content)
+    music = %{:title => file.filename, :filePath => "priv/static/music/#{file.filename}", :album_id => album_id, :artist_id => artist_id}
+    case Manage.create_music(music) do
       {:ok, music} ->
         conn
         |> put_flash(:info, "Music created successfully.")

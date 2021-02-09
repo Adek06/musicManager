@@ -1,0 +1,18 @@
+<h1>Show Album</h1>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @album.title %>
+  </li>
+
+  <li>
+    <strong>Year:</strong>
+    <%= @album.year %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.album_path(@conn, :edit, @album) %></span>
+<span><%= link "Back", to: Routes.album_path(@conn, :index) %></span>

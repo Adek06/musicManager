@@ -7,8 +7,8 @@ defmodule MusicManager.Manage.Music do
     field :filePath, :string
     field :year, :integer, default: 999
     field :genre, :string, default: "未知"
-    belongs_to :album, Album
-    belongs_to :artist, Artist
+    belongs_to :album, MusicManager.Manage.Album
+    belongs_to :artist, MusicManager.Manage.Artist
     timestamps()
   end
 

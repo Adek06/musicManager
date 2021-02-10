@@ -16,11 +16,13 @@ defmodule MusicManagerWeb.MusicController do
 
   def create(conn, %{"music" => music_params}) do
     file = music_params["musicFile"]
-    File.cp(file.path, "priv/static/music/#{file.filename}")
+    file_store_path = "priv/static/music/#{file.filename}"
+    File.cp(file.path, file_store_path)
 
     id3_tags = ID3v2.parse(file.path)
     album_title = if Map.get(id3_tags, "TALB"), do: id3_tags["TALB"], else: "未知"
     year = if Map.get(id3_tags, "TDRC"), do: id3_tags["TDRC"], else: 999
+
     album = Manage.get_album_by_name(album_title)
     album_id = if album == nil do
       album_id = case Manage.create_album(%{:title => album_title, :year => year}) do
@@ -50,7 +52,7 @@ defmodule MusicManagerWeb.MusicController do
 
     # {:ok, content} = File.read(file.path)
     # Aliyun.Oss.Object.put_object("adek06game", file.filename, content)
-    music = %{:title => file.filename, :filePath => "priv/static/music/#{file.filename}", :album_id => album_id, :artist_id => artist_id}
+    music = %{:title => file.filename, :filePath => file_store_path, :album_id => album_id, :artist_id => artist_id}
     case Manage.create_music(music) do
       {:ok, music} ->
         conn
@@ -63,7 +65,7 @@ defmodule MusicManagerWeb.MusicController do
   end
 
   def show(conn, %{"id" => id}) do
-    music = Manage.get_music!(id)
+    music = Manage.get_music(id)
     render(conn, "show.html", music: music)
   end
 

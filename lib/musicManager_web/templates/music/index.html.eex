@@ -1,11 +1,11 @@
-<h1>Listing Musics</h1>
+<h1>Musics</h1>
 
 <table>
   <thead>
     <tr>
       <th>Name</th>
-      <th>File</th>
-
+      <th>Album</th>
+      <th>Artist</th>
       <th></th>
     </tr>
   </thead>
@@ -13,7 +13,8 @@
 <%= for music <- @musics do %>
     <tr>
       <td><%= music.title %></td>
-
+      <td><%= music.album.title %></td>
+      <td><%= music.artist.name %></td>
       <td>
         <span><%= link "Show", to: Routes.music_path(@conn, :show, music) %></span>
         <span><%= link "Edit", to: Routes.music_path(@conn, :edit, music) %></span>

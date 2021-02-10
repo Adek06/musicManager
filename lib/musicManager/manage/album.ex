@@ -5,6 +5,7 @@ defmodule MusicManager.Manage.Album do
   schema "albums" do
     field :title, :string
     field :year, :integer
+    has_many :music, MusicManager.Manage.Music
 
     timestamps()
   end

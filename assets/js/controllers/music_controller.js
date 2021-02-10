@@ -4,8 +4,6 @@ import "axios"
 import axios from "axios"
 let OSS = require('ali-oss')
 
-
-
 export default class extends Controller {
     static targets = [ "name", "output", "musicFile" ]
     test() {

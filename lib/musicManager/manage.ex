@@ -7,6 +7,8 @@ defmodule MusicManager.Manage do
   alias MusicManager.Repo
 
   alias MusicManager.Manage.Music
+  alias MusicManager.Manage.Artist
+  alias MusicManager.Manage.Album
 
   @doc """
   Returns the list of musics.
@@ -18,7 +20,7 @@ defmodule MusicManager.Manage do
 
   """
   def list_musics do
-    Repo.all(Music)
+    Repo.all(Music) |> Repo.preload([:album, :artist])
   end
 
   @doc """
@@ -37,6 +39,11 @@ defmodule MusicManager.Manage do
   """
   def get_music!(id), do: Repo.get!(Music, id)
 
+  def get_music(id) do
+    Repo.get(Music, id) |> Repo.preload([:album, :artist])
+  end
+  
+    
   @doc """
   Creates a music.
 
@@ -102,7 +109,6 @@ defmodule MusicManager.Manage do
     Music.changeset(music, attrs)
   end
 
-  alias MusicManager.Manage.Album
 
   @doc """
   Returns the list of albums.
@@ -203,7 +209,6 @@ defmodule MusicManager.Manage do
     Album.changeset(album, attrs)
   end
 
-  alias MusicManager.Manage.Artist
 
   @doc """
   Returns the list of artists.

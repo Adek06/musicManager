@@ -4,6 +4,7 @@ defmodule MusicManager.Manage.Artist do
 
   schema "artists" do
     field :name, :string
+    has_many :music, MusicManager.Manage.Music
 
     timestamps()
   end

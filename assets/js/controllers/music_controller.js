@@ -6,20 +6,6 @@ let OSS = require('ali-oss')
 
 export default class extends Controller {
     static targets = [ "name", "output", "musicFile" ]
-    test() {
-        console.log("test")
-        var csrf = document.querySelector("meta[name=csrf]").content;
-
-        axios.post('/music', {
-            name: 'test',
-            url: 'test url'
-        },
-        {
-            headers: {
-                "X-CSRF-TOKEN": csrf
-            }
-        })
-    }
 
     upload() {
         let client = new OSS({

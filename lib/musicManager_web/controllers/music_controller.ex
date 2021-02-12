@@ -20,8 +20,17 @@ defmodule MusicManagerWeb.MusicController do
     File.cp(file.path, file_store_path)
 
     id3_tags = ID3v2.parse(file.path)
-    album_title = if Map.get(id3_tags, "TALB"), do: id3_tags["TALB"], else: "未知"
-    year = if Map.get(id3_tags, "TDRC"), do: id3_tags["TDRC"], else: 999
+    version = Map.get(id3_tags, "version")
+    {album_title, year} = case version do
+      2 ->
+        album_title = if Map.get(id3_tags, "TAL"), do: id3_tags["TAL"], else: "未知"
+        year = if Map.get(id3_tags, "TDR"), do: id3_tags["TDR"], else: 999
+        {album_title, year}
+      _ ->
+        album_title = if Map.get(id3_tags, "TALB"), do: id3_tags["TALB"], else: "未知"
+        year = if Map.get(id3_tags, "TDRC"), do: id3_tags["TDRC"], else: 999
+        {album_title, year}
+    end
 
     album = Manage.get_album_by_name(album_title)
     album_id = if album == nil do

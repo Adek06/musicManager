@@ -61,7 +61,7 @@ defmodule ID3v2 do
       size :: binary-size(4),
       _ :: binary >> = contents
     << versionMajor, versionMinor >> = version
-    tag_size = cal_size(1, size)
+    tag_size = cal_size(4, size)
     %{
       version: {versionMajor, versionMinor},
       flags: "",
@@ -74,7 +74,7 @@ defmodule ID3v2 do
     << _ :: binary-size(10), framedata :: binary-size(size), _ :: binary >> = bytes
     versionMajor = elem version, 0
     IO.puts "version is: #{versionMajor}\n"
-    read_frame(versionMajor, framedata)
+    read_frame(versionMajor, framedata, size)
   end
 
   @doc """
@@ -91,24 +91,25 @@ defmodule ID3v2 do
       %{}
   """
   @spec read_frame(Integer.t(), Binary.t()) :: %{}
-  def read_frame(_, <<0, _ :: binary>>) do
-    %{}
+  def read_frame(version, <<0, _ :: binary>>, _) do
+    %{"version" => version}
   end
 
-  def read_frame(2, data) do
+  def read_frame(2, data, max_size \\ 0) do
     << frame_header :: binary-size(6), rest :: binary >> = data
-    << identifier :: binary-size(3), size :: binary-size(3) >> = frame_header
-
+    << frame_type :: binary-size(3), size :: binary-size(3) >> = frame_header
     frame_info_size = cal_size(2, size)
-    << content :: binary-size(frame_info_size), another_frames :: binary >> = rest
+    if max_size != 0 && frame_info_size > max_size do
+      %{"version" => 2}
+    else 
+      << payload :: binary-size(frame_info_size), another_frames :: binary >> = rest
 
-    IO.puts identifier
-    Enum.join(for <<c::utf8 <- content>>, do: <<c::utf8>>) |> IO.puts
-
-    read_frame(2, another_frames)
+      value = read_payload(frame_type, payload) |> strip_zero_bytes
+      Map.merge(%{frame_type => value}, read_frame(2, another_frames, max_size))
+    end
   end
 
-  def read_frame(version, data) do
+  def read_frame(version, data, _) do
     << frame_header :: binary-size(10), rest :: binary >> = data
     << frame_type :: binary-size(4), size :: binary-size(4), flags :: binary-size(2)>> = frame_header
 
@@ -139,7 +140,7 @@ defmodule ID3v2 do
     #IO.inspect value
     #IO.puts "\n"
     
-    Map.merge(%{frame_type => value}, read_frame(version, another_frames))
+    Map.merge(%{frame_type => value}, read_frame(version, another_frames, 0))
   end
 
   def strip_zero_bytes(<<h, t::binary>>) do
@@ -168,6 +169,7 @@ defmodule ID3v2 do
       "WXXX" -> read_user_url payload
       "TXXX" -> "" # TODO read_user_text payload
       "APIC" -> "" # TODO Handle embedded JPEG data?
+      "PIC" -> ""
       _ -> read_standard_payload payload
     end
   end

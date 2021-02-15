@@ -1,0 +1,32 @@
+<h1>Musics</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Album</th>
+      <th>Artist</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <%= for music <- @musics do %>
+      <tr data-controller="music"
+        data-music-path-value="<%= music.filePath %>" 
+        data-music-title-value="<%= music.title %>"
+        data-music-album-value="<%= music.album.title %>"
+        data-music-artist-value="<%= music.artist.name %>"
+      >
+      <td><%= music.title %></td>
+      <td><%= music.album.title %></td>
+      <td><%= music.artist.name %></td>
+      <td>
+        <span data-action="click->music#play">play</span>
+        <span><%= link "Show", to: Routes.music_path(@conn, :show, music) %></span>
+        <span><%= link "Edit", to: Routes.music_path(@conn, :edit, music) %></span>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<span><%= link "New Music", to: Routes.music_path(@conn, :new) %></span>

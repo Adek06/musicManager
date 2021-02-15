@@ -1,30 +1,20 @@
-// music_controller.js
 import { Controller } from "stimulus"
-import "axios"
-import axios from "axios"
-let OSS = require('ali-oss')
 
 export default class extends Controller {
-    static targets = [ "name", "output", "musicFile" ]
-
-    upload() {
-        let client = new OSS({
-            region: 'oss-cn-beijing',
-            accessKeyId: '',
-            accessKeySecret: '',
-            bucket: 'adek06game'
-        })
-        let file = document.getElementById("musicFile").files[0];
-        client.put('testMusic.mp3', file).then(function (r1) {
-            console.log('success');
-            return client.get('object');
-        }).catch(function (err) {
-            console.error('error: ', err);
-        });
+    static values = {
+        title: String,
+        path: String,
+        album: String,
+        artist: String
     }
 
-    greet() {
-        this.outputTarget.textContent =
-            `Hello, ${this.nameTarget.value}!`
+    play() {
+        let path = this.pathValue.slice(12)
+        let player_audio = document.querySelector("#player_audio")
+        player_audio.src = path
+
+        let title = this.titleValue
+        let player_title = document.querySelector("#player_title")
+        player_title.innerHTML = title
     }
 }

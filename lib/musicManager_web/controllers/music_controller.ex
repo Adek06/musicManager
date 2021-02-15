@@ -21,16 +21,20 @@ defmodule MusicManagerWeb.MusicController do
 
     id3_tags = ID3v2.parse(file.path)
     version = Map.get(id3_tags, "version")
-    {album_title, year} = case version do
-      2 ->
-        album_title = if Map.get(id3_tags, "TAL"), do: id3_tags["TAL"], else: "未知"
-        year = if Map.get(id3_tags, "TDR"), do: id3_tags["TDR"], else: 999
-        {album_title, year}
-      _ ->
-        album_title = if Map.get(id3_tags, "TALB"), do: id3_tags["TALB"], else: "未知"
-        year = if Map.get(id3_tags, "TDRC"), do: id3_tags["TDRC"], else: 999
-        {album_title, year}
-    end
+    {title, album_title, year, artist_name} = case version do
+                            2 ->
+                              title = if Map.get(id3_tags, "TT2"), do: id3_tags["TT2"], else: "未知"
+                              album_title = if Map.get(id3_tags, "TAL"), do: id3_tags["TAL"], else: "未知"
+                              year = if Map.get(id3_tags, "TDR"), do: id3_tags["TDR"], else: 999
+                              artist = if Map.get(id3_tags, "TP1"), do: id3_tags["TP1"], else: "未知"
+                              {title, album_title, year, artist}
+                            _ ->
+                              title = if Map.get(id3_tags, "TIT2"), do: id3_tags["TIT2"], else: "未知"
+                              album_title = if Map.get(id3_tags, "TALB"), do: id3_tags["TALB"], else: "未知"
+                              year = if Map.get(id3_tags, "TDRC"), do: id3_tags["TDRC"], else: 999
+                              artist = if Map.get(id3_tags, "TPE1"), do: id3_tags["TPE1"], else: "未知"
+                              {title, album_title, year, artist}
+                          end
 
     album = Manage.get_album_by_name(album_title)
     album_id = if album == nil do
@@ -45,7 +49,6 @@ defmodule MusicManagerWeb.MusicController do
       album.id
     end
 
-    artist_name = if Map.get(id3_tags, "TPE1"), do: id3_tags["TPE1"], else: "未知"
     artist = Manage.get_artist_by_name(artist_name)
     artist_id = if artist == nil do
       artist_id = case Manage.create_artist(%{:name => artist_name}) do
@@ -61,9 +64,11 @@ defmodule MusicManagerWeb.MusicController do
 
     # {:ok, content} = File.read(file.path)
     # Aliyun.Oss.Object.put_object("adek06game", file.filename, content)
-    music = %{:title => file.filename, :filePath => file_store_path, :album_id => album_id, :artist_id => artist_id}
+    music = %{:title => title, :filePath => file_store_path, :album_id => album_id, :artist_id => artist_id}
+    IO.inspect music
     case Manage.create_music(music) do
       {:ok, music} ->
+        IO.inspect music
         conn
         |> put_flash(:info, "Music created successfully.")
         |> redirect(to: Routes.music_path(conn, :show, music))

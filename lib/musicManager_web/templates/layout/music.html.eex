@@ -1,4 +1,0 @@
-<div class="footer">
-  <span id="player_title"></span>
-  <audio id="player_audio" controls autoplay="autoPlay"></audio>
-</div>

@@ -7,7 +7,10 @@
     <meta name="csrf" content="<%= Plug.CSRFProtection.get_csrf_token() %>">
     <title>MusicManager · Phoenix Framework</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
   </head>
   <body>
     <header>
@@ -32,6 +35,6 @@
       <%= @inner_content %>
     </main>
     </turbo-frame>
-    <%= render "music.html" %>
+    <div id="player"></div>
   </body>
 </html>

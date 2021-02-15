@@ -13,8 +13,14 @@ export default class extends Controller {
         let player_audio = document.querySelector("#player_audio")
         player_audio.src = path
 
-        let title = this.titleValue
-        let player_title = document.querySelector("#player_title")
-        player_title.innerHTML = title
+        let player = document.querySelector("#player")
+        let musicInfos = {
+            "title": this.titleValue,
+            "album": this.albumValue,
+            "artist": this.artistValue
+        }
+        for(let k in musicInfos){
+            player.setAttribute(k, musicInfos[k])
+        }
     }
 }

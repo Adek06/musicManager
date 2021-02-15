@@ -1,0 +1,8 @@
+<div class="footer columns" data-controller="player">
+  <div class="column is-one-fifth">
+    <span id="player_title">未知</span>
+  </div>
+  <div class="column">
+    <audio id="player_audio" controls autoplay="autoPlay"></audio>
+  </div>
+</div>

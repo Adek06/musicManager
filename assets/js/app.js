@@ -19,6 +19,7 @@ import "phoenix_html"
 import { Application } from "stimulus"
 import { definitionsFromContext } from "stimulus/webpack-helpers"
 import * as Turbo from "@hotwired/turbo"
+import "./component/player"
 
 var Turbolinks = require("turbolinks")
 Turbolinks.start()

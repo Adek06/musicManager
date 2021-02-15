@@ -1,0 +1,4 @@
+<div class="footer">
+    <span id="player_title">未知</span>
+    <audio preload= "auto" controls autoPlay="autoplay" id="player_audio"></audio>
+</div>

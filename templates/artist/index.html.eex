@@ -1,0 +1,26 @@
+<h1>Listing Artists</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for artist <- @artists do %>
+    <tr>
+      <td><%= artist.name %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.artist_path(@conn, :show, artist) %></span>
+        <span><%= link "Edit", to: Routes.artist_path(@conn, :edit, artist) %></span>
+        <span><%= link "Delete", to: Routes.artist_path(@conn, :delete, artist), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Artist", to: Routes.artist_path(@conn, :new) %></span>

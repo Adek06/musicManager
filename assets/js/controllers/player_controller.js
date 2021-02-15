@@ -1,5 +1,4 @@
 import { Controller } from "stimulus"
-import APlayer from 'APlayer';
 
 export default class extends Controller {
     static values = {
@@ -9,18 +8,14 @@ export default class extends Controller {
         artist: String
     }
 
+    static targets = ["test" ]
+
+    titleValueChanged(){
+    }
+    
     play() {
         let path = this.pathValue.slice(12)
-        console.log(this.artistValue)
-        const ap = new APlayer({
-            container: document.getElementById('aplayer'),
-            audio: [{
-                name: this.titleValue,
-                artist: this.artistValue,
-                url: path,
-                cover: 'cover.jpg'
-            }]
-        });
-        ap.play()
+        let player = document.querySelector("#player")
+        player.src = path
     }
 }

@@ -11,25 +11,21 @@
   </thead>
   <tbody>
   <%= for music <- @musics do %>
-    <tr data-controller="player" data-player-path-value="<%= music.filePath %>" 
-        data-player-title-value="<%= music.title %>"
-        data-player-album-value="<%= music.album.title %>"
-        data-player-artist-value="<%= music.artist.name %>"
+    <tr data-controller="music" data-music-path-value="<%= music.filePath %>" 
+        data-music-title-value="<%= music.title %>"
+        data-music-album-value="<%= music.album.title %>"
+        data-music-artist-value="<%= music.artist.name %>"
     >
       <td><%= music.title %></td>
       <td><%= music.album.title %></td>
       <td><%= music.artist.name %></td>
       <td>
-        <span data-action="click->player#play">play</span>
+        <span data-action="click->music#play">play</span>
         <span><%= link "Show", to: Routes.music_path(@conn, :show, music) %></span>
         <span><%= link "Edit", to: Routes.music_path(@conn, :edit, music) %></span>
-        <span><%= link "Delete", to: Routes.music_path(@conn, :delete, music), method: :delete, data: [confirm: "Are you sure?"] %></span>
       </td>
     </tr>
   <% end %>
   </tbody>
 </table>
-
-<div id="aplayer"></div>
-
 <span><%= link "New Music", to: Routes.music_path(@conn, :new) %></span>

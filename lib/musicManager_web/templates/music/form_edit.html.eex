@@ -8,4 +8,5 @@
   <div>
     <%= submit "Save" %>
   </div>
+  <%= button "Delete", to: Routes.music_path(@conn, :delete, @music), method: :delete, data: [confirm: "Are you sure?"] %>
 <% end %>

@@ -139,6 +139,9 @@ defmodule MusicManager.Manage do
   """
   def get_album!(id), do: Repo.get!(Album, id)
 
+  def get_album(id) do
+    Repo.get(Album, id) |> Repo.preload([:music])
+  end
   @doc """
   Gets a single album by name
   """

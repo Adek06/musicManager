@@ -27,7 +27,7 @@ defmodule MusicManagerWeb.AlbumController do
   end
 
   def show(conn, %{"id" => id}) do
-    album = Manage.get_album!(id)
+    album = Manage.get_album(id)
     render(conn, "show.html", album: album)
   end
 

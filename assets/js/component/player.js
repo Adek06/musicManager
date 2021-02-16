@@ -4,30 +4,36 @@ const domID = "player"
 class PlayerAudio extends React.Component{
     constructor(props){
         super(props);
+        this.test = this.test.bind(this);
+    }
+
+    test() {
+        alert("next music")
     }
 
     render() {
+        let test = this.test
         return e(
             'audio',
-            {id: "player_audio", controls: true, autoPlay:"autoPlay"},
+            {id: "player_audio", controls: true, autoPlay:"autoPlay", onEnded:{test}},
             null
         )
     }
 }
 
 function PlayerInfo(props) {
-    let title = props.title
+    let content = props.content
     return e(
         'span',
-        {},
-        title
+        {className: "columns"},
+        content
     )
 }
 
 class Player extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { title: props.title };
+    this.state = { title: props.title, album: props.album};
     // 选择需要观察变动的节点
     const targetNode = document.querySelector('#'+domID);
 
@@ -53,15 +59,20 @@ class Player extends React.Component {
     // 以上述配置开始观察目标节点
     observer.observe(targetNode, config);
   }
+
+  nextMusic() {
+
+  }
   
   render() {
     let title = this.state.title
+    let album = this.state.album
     return e(
       'div',
       { className: "footer columns" },
       e('div', {className: "column is-one-fifth"}, 
-        e(PlayerInfo, {title: title}, null),
-        e(PlayerInfo, {title: title}, null)),
+        e(PlayerInfo, {content: title}, null),
+        e(PlayerInfo, {content: album}, null)),
       e('div', {className:'column'}, e(PlayerAudio))
     );
   }

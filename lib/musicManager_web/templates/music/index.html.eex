@@ -17,7 +17,7 @@
         data-music-artist-value="<%= music.artist.name %>"
     >
       <td><%= music.title %></td>
-      <td><%= music.album.title %></td>
+      <td><%= link music.album.title, to: Routes.album_path(@conn, :show, music.album) %></td>
       <td><%= music.artist.name %></td>
       <td>
         <span data-action="click->music#play">play</span>

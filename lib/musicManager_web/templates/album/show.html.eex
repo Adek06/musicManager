@@ -11,7 +11,18 @@
     <strong>Year:</strong>
     <%= @album.year %>
   </li>
-
+  <div data-controller="album">
+    <button class="button" data-action="click->album#play">播放专辑</button>
+  </div>
+  <%= for music <- @album.music do %>
+  <li data-controller="music"
+      data-music-album-value="<%= @album.title %>"
+      data-music-path-value="<%= music.filePath %>"
+      data-music-title-value="<%= music.title %>"
+  >
+    <span data-action="click->music#play"> <%= music.title %> </span>
+  </li>
+  <% end %>
 </ul>
 
 <span><%= link "Edit", to: Routes.album_path(@conn, :edit, @album) %></span>
